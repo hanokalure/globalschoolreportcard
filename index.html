@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall Ticket Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header-section">
+        <div class="header-content">
+            <h1>Hall Ticket Generator</h1>
+            <p>Create professional hall tickets with diamond border design</p>
+        </div>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="progress-container">
+        <div class="progress-steps">
+            <div class="step active" data-step="1">
+                <div class="step-icon">📊</div>
+                <div class="step-info">
+                    <div class="step-title">Upload Data</div>
+                    <div class="step-subtitle">Excel file with students</div>
+                </div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-icon">🎨</div>
+                <div class="step-info">
+                    <div class="step-title">Customize</div>
+                    <div class="step-subtitle">School & exam details</div>
+                </div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-icon">✏️</div>
+                <div class="step-info">
+                    <div class="step-title">Configure</div>
+                    <div class="step-subtitle">Hall ticket details</div>
+                </div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-icon">👁️</div>
+                <div class="step-info">
+                    <div class="step-title">Preview</div>
+                    <div class="step-subtitle">Review hall tickets</div>
+                </div>
+            </div>
+            <div class="step" data-step="5">
+                <div class="step-icon">📋</div>
+                <div class="step-info">
+                    <div class="step-title">Generate</div>
+                    <div class="step-subtitle">Download hall tickets</div>
+                </div>
+            </div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 20%"></div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="main-container">
+        
+        <!-- Step 1: Upload Data -->
+        <div class="step-content active" id="step1">
+            <div class="step-header">
+                <h2>📊 Step 1: Upload Student Data</h2>
+                <p>Upload your Excel file containing student information and marks</p>
+            </div>
+            
+            <div class="upload-zone">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <h3>Choose Excel File</h3>
+                    <p>Drag and drop or click to select your Excel file</p>
+                    <input type="file" id="excelFile" accept=".xlsx,.xls" style="display: none;" />
+                    <button class="browse-btn" type="button" id="browseBtn">Browse Files</button>
+                </div>
+            </div>
+            
+            <div class="file-info">
+                <h4>📋 Required Excel Format</h4>
+                <div class="format-table">
+                    <div class="format-row header">
+                        <span>ROLL_NUMBER</span>
+                        <span>STUDENT_NAME</span>
+                        <span>FATHER_NAME</span>
+                        <span>CLASS</span>
+                        <span>SECTION</span>
+                        <span>EXAM_SUBJECTS</span>
+                    </div>
+                    <div class="format-row">
+                        <span>16</span>
+                        <span>SYEDA WANIYA MAHAM</span>
+                        <span>SYED ZAHIR</span>
+                        <span>5th</span>
+                        <span>A</span>
+                        <span>All Subjects</span>
+                    </div>
+                </div>
+                <p><strong>💡 Tip:</strong> Alternative column names like StudentName, FatherName also work!</p>
+            </div>
+            
+            <div class="step-actions">
+                <button class="btn btn-primary" id="nextToCustomize" disabled>Next: Customize →</button>
+            </div>
+        </div>
+        
+        <!-- Step 2: Customize -->
+        <div class="step-content" id="step2">
+            <div class="step-header">
+                <h2>🎨 Step 2: Customize Report Card</h2>
+                <p>Configure school information and report card details</p>
+            </div>
+            
+            <div class="customize-grid">
+                <div class="customize-group">
+                    <h4>🏫 School Information</h4>
+                    <div class="input-group">
+                        <label for="schoolName">School Name</label>
+                        <input type="text" id="schoolName" value="GLOBAL'S SANMARG PUBLIC SCHOOL BIDAR">
+                    </div>
+                    <div class="input-group">
+                        <label for="schoolSubtitle">School Description</label>
+                        <input type="text" id="schoolSubtitle" value="English Medium School With Shaba-E-Hifz and IIT Foundation Course">
+                    </div>
+                    <div class="input-group">
+                        <label for="examTitle">Exam Title</label>
+                        <input type="text" id="examTitle" value="Marks Card Annual Exam (2020-21)">
+                    </div>
+                </div>
+                
+                <div class="customize-group">
+                    <h4>📚 Subject Configuration</h4>
+                    <div class="subjects-grid">
+                        <div class="input-group">
+                            <label for="subject1">Subject 1</label>
+                            <input type="text" id="subject1" value="Mathematics">
+                        </div>
+                        <div class="input-group">
+                            <label for="subject2">Subject 2</label>
+                            <input type="text" id="subject2" value="Science">
+                        </div>
+                        <div class="input-group">
+                            <label for="subject3">Subject 3</label>
+                            <input type="text" id="subject3" value="Social">
+                        </div>
+                        <div class="input-group">
+                            <label for="subject4">Subject 4</label>
+                            <input type="text" id="subject4" value="English">
+                        </div>
+                        <div class="input-group">
+                            <label for="subject5">Subject 5</label>
+                            <input type="text" id="subject5" value="Kannada">
+                        </div>
+                        <div class="input-group">
+                            <label for="subject6">Subject 6</label>
+                            <input type="text" id="subject6" value="Hindi/Urdu">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step-actions">
+                <button class="btn btn-secondary" id="backToUpload">← Back</button>
+                <button class="btn btn-primary" id="nextToMarks">Next: Edit Marks →</button>
+            </div>
+        </div>
+        
+        <!-- Step 3: Edit Marks -->
+        <div class="step-content" id="step3">
+            <div class="step-header">
+                <h2>✏️ Step 3: Edit Marks</h2>
+                <p>Set marking system for the report cards</p>
+            </div>
+            
+            <div class="marks-config-improved">
+                <div class="config-grid">
+                    <!-- Maximum Marks Section -->
+                    <div class="config-section">
+                        <div class="config-header">
+                            <div class="config-icon max-icon">🎯</div>
+                            <div class="config-title">
+                                <h3>Maximum Marks</h3>
+                                <p>Highest possible score per subject</p>
+                            </div>
+                        </div>
+                        <div class="config-input-wrapper">
+                            <input type="number" id="batchMaxMarks" value="100" min="1" max="1000" oninput="updateBatchTotals()" class="config-input">
+                            <span class="input-unit">marks</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Minimum Marks Section -->
+                    <div class="config-section">
+                        <div class="config-header">
+                            <div class="config-icon min-icon">🏆</div>
+                            <div class="config-title">
+                                <h3>Minimum Marks</h3>
+                                <p>Passing threshold per subject</p>
+                            </div>
+                        </div>
+                        <div class="config-input-wrapper">
+                            <input type="number" id="batchMinMarks" value="35" min="1" max="100" oninput="updateBatchTotals()" class="config-input">
+                            <span class="input-unit">marks</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Calculation Summary -->
+                <div class="calculation-summary">
+                    <h4 class="summary-title">📊 Calculation Summary</h4>
+                    <div class="summary-grid">
+                        <div class="summary-item total-max">
+                            <div class="summary-label">Total Maximum</div>
+                            <div class="summary-value" id="batchTotalMax">600</div>
+                            <div class="summary-formula" id="maxFormula">(100 × 6 subjects)</div>
+                        </div>
+                        <div class="summary-divider">vs</div>
+                        <div class="summary-item total-min">
+                            <div class="summary-label">Total Minimum</div>
+                            <div class="summary-value" id="batchTotalMin">210</div>
+                            <div class="summary-formula" id="minFormula">(35 × 6 subjects)</div>
+                        </div>
+                    </div>
+                    <div class="subjects-info">
+                        <span class="subjects-count">📚 6 Subjects Total</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step-actions">
+                <button class="btn btn-secondary" id="backToCustomize">← Back</button>
+                <button class="btn btn-primary" id="nextToPreview">Next: Preview →</button>
+            </div>
+        </div>
+        
+        <!-- Step 4: Preview -->
+        <div class="step-content" id="step4">
+            <div class="step-header">
+                <h2>👁️ Step 4: Preview Report Cards</h2>
+                <p>Review your report cards before generating PDFs</p>
+            </div>
+            
+            <div class="preview-controls">
+                <div class="preview-info">
+                    <span class="student-count">Found <strong id="studentCount">0</strong> students</span>
+                </div>
+                <div class="preview-actions">
+                    <button class="btn btn-outline" id="generatePreview">📊 Generate Statistics</button>
+                </div>
+            </div>
+            
+            <!-- Statistics Dashboard -->
+            <div id="statisticsContainer" class="statistics-container">
+                <div class="stats-placeholder">
+                    <div class="placeholder-icon">📊</div>
+                    <h3>Statistics Will Appear Here</h3>
+                    <p>Click "Generate Statistics" to see class-wise breakdown and performance overview.</p>
+                </div>
+            </div>
+            
+            <!-- Class Filter Section -->
+            <div id="classFilterSection" class="class-filter-section" style="display: none;">
+                <div class="filter-header">
+                    <h4>🎯 Quick Class Filter</h4>
+                    <p>Select a specific class to view detailed statistics</p>
+                </div>
+                <div class="class-buttons" id="classButtons">
+                    <!-- Class filter buttons will be generated here -->
+                </div>
+            </div>
+            
+            <div class="step-actions">
+                <button class="btn btn-secondary" id="backToMarks">← Back</button>
+                <button class="btn btn-success" id="proceedToGenerate">📋 Generate All Hall Tickets →</button>
+            </div>
+        </div>
+        
+        <!-- Step 5: Generate -->
+        <div class="step-content" id="step5">
+            <div class="step-header">
+                <h2>📋 Step 5: Generate & Download</h2>
+                <p>Your complete report cards are ready! Filter, print, or download as needed.</p>
+            </div>
+            
+            <div id="finalOutput" class="final-output">
+                <div class="generation-options">
+                    <div class="options-header">
+                        <div class="options-icon">📦</div>
+                        <h3>Choose Generation Method</h3>
+                        <p>Select how you want to generate and download your hall tickets</p>
+                    </div>
+                    
+                    <div class="generation-grid">
+                        <!-- Generate All Option -->
+                        <div class="generation-card all-cards">
+                            <div class="card-icon">📋</div>
+                            <h4>Generate All Hall Tickets</h4>
+                            <p>Create hall tickets for all students across all classes</p>
+                            <div class="card-stats">
+                                <span class="stat-item">
+                                    <strong id="totalStudentsCount">0</strong> Students
+                                </span>
+                                <span class="stat-item">
+                                    <strong id="totalClassesCount">0</strong> Classes
+                                </span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn primary-btn" onclick="generateAllHallTickets()">
+                                    🗨️ Print All
+                                </button>
+                                <button class="action-btn secondary-btn" onclick="downloadAllHallTickets()">
+                                    📥 Download PDF
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Class-wise Options -->
+                        <div class="generation-card class-wise">
+                            <div class="card-icon">🎯</div>
+                            <h4>Class-wise Generation</h4>
+                            <p>Generate hall tickets for specific classes only</p>
+                            <div class="class-selector">
+                                <label for="classSelectGenerate">Select Class:</label>
+                                <select id="classSelectGenerate" onchange="updateClassStats()">
+                                    <option value="">Choose a class...</option>
+                                </select>
+                            </div>
+                            <div class="class-stats" id="classStats" style="display: none;">
+                                <span class="stat-item">
+                                    <strong id="selectedClassCount">0</strong> Students
+                                </span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn primary-btn" onclick="printClassHallTickets()" id="printClassBtn" disabled>
+                                    🗨️ Print Class
+                                </button>
+                                <button class="action-btn secondary-btn" onclick="downloadClassHallTickets()" id="downloadClassBtn" disabled>
+                                    📥 Download Class PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div id="output"></div>
+
+    <template id="hallTicketTemplate">
+        <div class="hall-ticket">
+            <!-- Diamond Border Container -->
+            <div class="diamond-border-frame">
+                
+                <!-- Header Section -->
+                <div class="hall-ticket-header">
+                    <div class="school-logo">
+                        <img src="images/logo .jpg" alt="School Logo" class="logo-img">
+                    </div>
+                    <div class="school-info">
+                        <h1 class="school-name">GLOBAL'S SANMARG PUBLIC SCHOOL BIDAR</h1>
+                        <p class="school-subtitle">English Medium School With Shiksha-E-Hind and IIT Foundation Course</p>
+                        <h2 class="exam-title">Marks Card Annual Exam (2020-21)</h2>
+                    </div>
+                </div>
+
+                <!-- Student Information -->
+                <div class="student-info">
+                    <div class="student-left">
+                        <div class="student-field">
+                            <span class="field-label">STUDENT NAME:</span>
+                            <span class="field-value student-name"></span>
+                        </div>
+                        <div class="student-field">
+                            <span class="field-label">CLASS:</span>
+                            <span class="field-value class"></span>
+                        </div>
+                        <div class="student-field">
+                            <span class="field-label">ROLL NO:</span>
+                            <span class="field-value roll-no"></span>
+                        </div>
+                    </div>
+                    <div class="student-right">
+                        <div class="student-field">
+                            <span class="field-label">FATHER NAME:</span>
+                            <span class="field-value father-name"></span>
+                        </div>
+                        <div class="student-field">
+                            <span class="field-label">SECTION:</span>
+                            <span class="field-value section"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marks Table -->
+                <div class="marks-section">
+                    <table class="marks-table">
+                        <thead>
+                            <tr>
+                                <th>Subjects</th>
+                                <th>Max.Marks</th>
+                                <th>Min.Marks</th>
+                                <th>Marks Obt.</th>
+                                <th>Remark</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mathematics</td>
+                                <td>100</td>
+                                <td>35</td>
+                                <td class="math-marks">66</td>
+                                <td class="math-remark"></td>
+                            </tr>
+                            <tr>
+                                <td>Science</td>
+                                <td>100</td>
+                                <td>35</td>
+                                <td class="science-marks">65</td>
+                                <td class="science-remark"></td>
+                            </tr>
+                            <tr>
+                                <td>Social</td>
+                                <td>100</td>
+                                <td>35</td>
+                                <td class="social-marks">55</td>
+                                <td class="social-remark"></td>
+                            </tr>
+                            <tr>
+                                <td>English</td>
+                                <td>100</td>
+                                <td>35</td>
+                                <td class="english-marks">66</td>
+                                <td class="english-remark"></td>
+                            </tr>
+                            <tr>
+                                <td>Kannada</td>
+                                <td>100</td>
+                                <td>35</td>
+                                <td class="kannada-marks">69</td>
+                                <td class="kannada-remark"></td>
+                            </tr>
+                            <tr>
+                                <td>Hindi/Urdu</td>
+                                <td>100</td>
+                                <td>35</td>
+                                <td class="hindi-marks">70</td>
+                                <td class="hindi-remark"></td>
+                            </tr>
+                            <tr class="total-row">
+                                <td><strong>Total</strong></td>
+                                <td><strong>600</strong></td>
+                                <td><strong>210</strong></td>
+                                <td class="total-marks"><strong>396</strong></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rank</strong></td>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr class="percentage-row">
+                                <td><strong>Percentage</strong></td>
+                                <td colspan="3" class="percentage">66</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Grade</strong></td>
+                                <td colspan="3" class="grade">B</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Co-Scholastic Areas -->
+                <div class="co-scholastic">
+                    <h3>Co-Scholastic Areas</h3>
+                    <div class="co-scholastic-grid">
+                        <div class="co-item">
+                            <span>1. Discipline in the classroom</span>
+                            <div class="grade-options">[ A / B / C ]</div>
+                        </div>
+                        <div class="co-item">
+                            <span>2. Behavior / Conduct with teachers & classmates</span>
+                            <div class="grade-options">[ A / B / C ]</div>
+                        </div>
+                        <div class="co-item">
+                            <span>3. Regularity & Neatness in doing HW/CW</span>
+                            <div class="grade-options">[ A / B / C ]</div>
+                        </div>
+                        <div class="co-item">
+                            <span>4. Comes to School: On time [ ] / Sometimes Late [ ] / Always Late [ ]</span>
+                            <div class="grade-options"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Signatures -->
+                <div class="signatures">
+                    <div class="signature-item">
+                        <div class="signature-line"></div>
+                        <strong>Parent Sign</strong>
+                    </div>
+                    <div class="signature-item">
+                        <div class="signature-line"></div>
+                        <strong>Class Teacher</strong>
+                    </div>
+                    <div class="signature-item">
+                        <div class="signature-line"></div>
+                        <strong>Academic Head</strong>
+                    </div>
+                </div>
+                
+                <div class="diamond-border-bottom"></div>
+            </div>
+
+            <!-- Download Section -->
+            <div class="download-section">
+                <button class="print-btn" onclick="printHallTicket(this)">🖨️ Print</button>
+                <button class="view-btn" onclick="viewHallTicket(this)">👁️ View PDF</button>
+                <button class="download-btn" onclick="downloadHallTicket(this)">📥 Download PDF</button>
+            </div>
+        </div>
+    </template>
+
+    <script src="script.js"></script>
+    
+</body>
+</html>

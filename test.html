@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Input Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 50px; }
+        .test-area { 
+            border: 2px dashed #ccc; 
+            padding: 50px; 
+            text-align: center; 
+            margin: 20px 0;
+            cursor: pointer;
+        }
+        button { 
+            padding: 15px 30px; 
+            font-size: 16px; 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+        }
+    </style>
+</head>
+<body>
+    <h1>File Input Test</h1>
+    
+    <input type="file" id="testFile" accept=".xlsx,.xls" style="display: none;">
+    
+    <div class="test-area" id="testArea">
+        <p>Click here or drag Excel files</p>
+        <button type="button" id="testBtn">Browse Files</button>
+    </div>
+    
+    <div id="result"></div>
+    
+    <script>
+        console.log('Test script loaded');
+        
+        const fileInput = document.getElementById('testFile');
+        const testBtn = document.getElementById('testBtn');
+        const testArea = document.getElementById('testArea');
+        const result = document.getElementById('result');
+        
+        console.log('Elements:', { fileInput, testBtn, testArea });
+        
+        // Test button click
+        testBtn.addEventListener('click', function() {
+            console.log('Test button clicked');
+            result.innerHTML = '<p>Button clicked - triggering file input...</p>';
+            fileInput.click();
+        });
+        
+        // Test area click
+        testArea.addEventListener('click', function(e) {
+            console.log('Test area clicked');
+            if (e.target !== testBtn) {
+                result.innerHTML = '<p>Area clicked - triggering file input...</p>';
+                fileInput.click();
+            }
+        });
+        
+        // File input change
+        fileInput.addEventListener('change', function(e) {
+            console.log('File selected:', e.target.files);
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                result.innerHTML = `<p style="color: green;">✅ SUCCESS: File "${file.name}" selected!</p>`;
+            }
+        });
+        
+        // Drag and drop
+        testArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            testArea.style.borderColor = '#007bff';
+        });
+        
+        testArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            testArea.style.borderColor = '#ccc';
+        });
+        
+        testArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            testArea.style.borderColor = '#ccc';
+            
+            const files = e.dataTransfer.files;
+            console.log('Files dropped:', files);
+            if (files.length > 0) {
+                result.innerHTML = `<p style="color: green;">✅ SUCCESS: File "${files[0].name}" dropped!</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
