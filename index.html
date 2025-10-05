@@ -3,355 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hall Ticket Generator</title>
+    <title>Maximus Report Card Generator Portal</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <!-- Header Section -->
     <div class="header-section">
-        <div class="header-content">
-            <h1>Hall Ticket Generator</h1>
-            <p>Create professional hall tickets with diamond border design</p>
+        <div class="header-container">
+            <div class="header-brand">
+                <img src="images/logo.jpg" alt="Maximus Logo" class="brand-logo">
+                <div class="brand-text">
+                    <h1>Maximus Report Card Generator Portal</h1>
+                    <p>Global's Sanmarg Public School - Professional Report Card Management System</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Progress Steps -->
     <div class="progress-container">
-        <div class="progress-steps">
-            <div class="step active" data-step="1">
-                <div class="step-icon">📊</div>
-                <div class="step-info">
-                    <div class="step-title">Upload Data</div>
-                    <div class="step-subtitle">Excel file with students</div>
+        <div class="steps-box">
+            <h3 class="steps-title">🚀 Report Card Generation Process</h3>
+            <div class="progress-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-icon">🏫</div>
+                    <div class="step-info">
+                        <div class="step-title">Select Class</div>
+                        <div class="step-subtitle">Choose class & academic year</div>
+                    </div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-icon">📝</div>
+                    <div class="step-info">
+                        <div class="step-title">Select Exam</div>
+                        <div class="step-subtitle">Choose exam for the class</div>
+                    </div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-icon">👥</div>
+                    <div class="step-info">
+                        <div class="step-title">Select Student</div>
+                        <div class="step-subtitle">Browse students in the class</div>
+                    </div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-icon">📋</div>
+                    <div class="step-info">
+                        <div class="step-title">Generate Card</div>
+                        <div class="step-subtitle">View/download report card</div>
+                    </div>
                 </div>
             </div>
-            <div class="step" data-step="2">
-                <div class="step-icon">🎨</div>
-                <div class="step-info">
-                    <div class="step-title">Customize</div>
-                    <div class="step-subtitle">School & exam details</div>
-                </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 25%"></div>
             </div>
-            <div class="step" data-step="3">
-                <div class="step-icon">✏️</div>
-                <div class="step-info">
-                    <div class="step-title">Configure</div>
-                    <div class="step-subtitle">Hall ticket details</div>
-                </div>
-            </div>
-            <div class="step" data-step="4">
-                <div class="step-icon">👁️</div>
-                <div class="step-info">
-                    <div class="step-title">Preview</div>
-                    <div class="step-subtitle">Review hall tickets</div>
-                </div>
-            </div>
-            <div class="step" data-step="5">
-                <div class="step-icon">📋</div>
-                <div class="step-info">
-                    <div class="step-title">Generate</div>
-                    <div class="step-subtitle">Download hall tickets</div>
-                </div>
-            </div>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" style="width: 20%"></div>
         </div>
     </div>
 
     <!-- Main Content Container -->
     <div class="main-container">
         
-        <!-- Step 1: Upload Data -->
+        <!-- Step 1: Select Class -->
         <div class="step-content active" id="step1">
             <div class="step-header">
-                <h2>📊 Step 1: Upload Student Data</h2>
-                <p>Upload your Excel file containing student information and marks</p>
+                <h2>🏫 Step 1: Select Class & Academic Year</h2>
+                <p>Choose the class and academic year for generating report cards</p>
             </div>
             
-            <div class="upload-zone">
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">📁</div>
-                    <h3>Choose Excel File</h3>
-                    <p>Drag and drop or click to select your Excel file</p>
-                    <input type="file" id="excelFile" accept=".xlsx,.xls" style="display: none;" />
-                    <button class="browse-btn" type="button" id="browseBtn">Browse Files</button>
+            <div class="selection-grid">
+                <div class="selection-group">
+                    <h4>📅 Academic Year</h4>
+                    <div class="input-group">
+                        <label for="academicYear">Academic Year</label>
+                        <select id="academicYear">
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="selection-group">
+                    <h4>🏫 Class Selection</h4>
+                    <div class="input-group">
+                        <label for="classSelect">Select Class</label>
+                        <select id="classSelect" disabled>
+                            <option value="">First select academic year</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             
-            <div class="file-info">
-                <h4>📋 Required Excel Format</h4>
-                <div class="format-table">
-                    <div class="format-row header">
-                        <span>ROLL_NUMBER</span>
-                        <span>STUDENT_NAME</span>
-                        <span>FATHER_NAME</span>
-                        <span>CLASS</span>
-                        <span>SECTION</span>
-                        <span>EXAM_SUBJECTS</span>
-                    </div>
-                    <div class="format-row">
-                        <span>16</span>
-                        <span>SYEDA WANIYA MAHAM</span>
-                        <span>SYED ZAHIR</span>
-                        <span>5th</span>
-                        <span>A</span>
-                        <span>All Subjects</span>
+            <div class="class-info" id="classInfo" style="display: none;">
+                <div class="info-card">
+                    <h4>📊 Class Information</h4>
+                    <div class="info-details">
+                        <p><strong>Class:</strong> <span id="selectedClassName"></span></p>
+                        <p><strong>Section:</strong> <span id="selectedClassSection"></span></p>
+                        <p><strong>Academic Year:</strong> <span id="selectedAcademicYear"></span></p>
+                        <p><strong>Total Students:</strong> <span id="totalStudents">Loading...</span></p>
                     </div>
                 </div>
-                <p><strong>💡 Tip:</strong> Alternative column names like StudentName, FatherName also work!</p>
             </div>
             
             <div class="step-actions">
-                <button class="btn btn-primary" id="nextToCustomize" disabled>Next: Customize →</button>
+                <button class="btn btn-primary" id="nextToExams" disabled>Next: Select Exam →</button>
             </div>
         </div>
         
-        <!-- Step 2: Customize -->
+        <!-- Step 2: Select Exam -->
         <div class="step-content" id="step2">
             <div class="step-header">
-                <h2>🎨 Step 2: Customize Report Card</h2>
-                <p>Configure school information and report card details</p>
+                <h2>📝 Step 2: Select Exam</h2>
+                <p>Choose the exam for which you want to generate report cards</p>
             </div>
             
-            <div class="customize-grid">
-                <div class="customize-group">
-                    <h4>🏫 School Information</h4>
-                    <div class="input-group">
-                        <label for="schoolName">School Name</label>
-                        <input type="text" id="schoolName" value="GLOBAL'S SANMARG PUBLIC SCHOOL BIDAR">
-                    </div>
-                    <div class="input-group">
-                        <label for="schoolSubtitle">School Description</label>
-                        <input type="text" id="schoolSubtitle" value="English Medium School With Shaba-E-Hifz and IIT Foundation Course">
-                    </div>
-                    <div class="input-group">
-                        <label for="examTitle">Exam Title</label>
-                        <input type="text" id="examTitle" value="Marks Card Annual Exam (2020-21)">
+            <div class="exam-selection">
+                <div class="selected-class-info" id="selectedClassInfo">
+                    <div class="info-card">
+                        <h4>🏫 Selected Class</h4>
+                        <div class="info-summary">
+                            <p><span id="currentClassName">No class selected</span> - <span id="currentClassSection">-</span></p>
+                            <p>Academic Year: <span id="currentAcademicYear">-</span></p>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="customize-group">
-                    <h4>📚 Subject Configuration</h4>
-                    <div class="subjects-grid">
-                        <div class="input-group">
-                            <label for="subject1">Subject 1</label>
-                            <input type="text" id="subject1" value="Mathematics">
-                        </div>
-                        <div class="input-group">
-                            <label for="subject2">Subject 2</label>
-                            <input type="text" id="subject2" value="Science">
-                        </div>
-                        <div class="input-group">
-                            <label for="subject3">Subject 3</label>
-                            <input type="text" id="subject3" value="Social">
-                        </div>
-                        <div class="input-group">
-                            <label for="subject4">Subject 4</label>
-                            <input type="text" id="subject4" value="English">
-                        </div>
-                        <div class="input-group">
-                            <label for="subject5">Subject 5</label>
-                            <input type="text" id="subject5" value="Kannada">
-                        </div>
-                        <div class="input-group">
-                            <label for="subject6">Subject 6</label>
-                            <input type="text" id="subject6" value="Hindi/Urdu">
-                        </div>
+                <div class="exam-grid" id="examGrid">
+                    <div class="loading-message">
+                        <div class="loading-icon">⏳</div>
+                        <h3>Loading Available Exams...</h3>
+                        <p>Please wait while we fetch exams for the selected class</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exam-info" id="examInfo" style="display: none;">
+                <div class="info-card">
+                    <h4>📝 Selected Exam Details</h4>
+                    <div class="info-details">
+                        <p><strong>Exam Name:</strong> <span id="selectedExamName"></span></p>
+                        <p><strong>Start Date:</strong> <span id="examStartDate"></span></p>
+                        <p><strong>End Date:</strong> <span id="examEndDate"></span></p>
+                        <p><strong>Max Marks:</strong> <span id="examMaxMarks"></span></p>
+                        <p><strong>Remarks:</strong> <span id="examRemarks"></span></p>
                     </div>
                 </div>
             </div>
             
             <div class="step-actions">
-                <button class="btn btn-secondary" id="backToUpload">← Back</button>
-                <button class="btn btn-primary" id="nextToMarks">Next: Edit Marks →</button>
+                <button class="btn btn-secondary" id="backToClass">← Back</button>
+                <button class="btn btn-primary" id="nextToStudents" disabled>Next: Select Student →</button>
             </div>
         </div>
         
-        <!-- Step 3: Edit Marks -->
+        <!-- Step 3: Select Student -->
         <div class="step-content" id="step3">
             <div class="step-header">
-                <h2>✏️ Step 3: Edit Marks</h2>
-                <p>Set marking system for the report cards</p>
+                <h2>👥 Step 3: Select Student</h2>
+                <p>Choose a student to generate their report card</p>
             </div>
             
-            <div class="marks-config-improved">
-                <div class="config-grid">
-                    <!-- Maximum Marks Section -->
-                    <div class="config-section">
-                        <div class="config-header">
-                            <div class="config-icon max-icon">🎯</div>
-                            <div class="config-title">
-                                <h3>Maximum Marks</h3>
-                                <p>Highest possible score per subject</p>
-                            </div>
-                        </div>
-                        <div class="config-input-wrapper">
-                            <input type="number" id="batchMaxMarks" value="100" min="1" max="1000" oninput="updateBatchTotals()" class="config-input">
-                            <span class="input-unit">marks</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Minimum Marks Section -->
-                    <div class="config-section">
-                        <div class="config-header">
-                            <div class="config-icon min-icon">🏆</div>
-                            <div class="config-title">
-                                <h3>Minimum Marks</h3>
-                                <p>Passing threshold per subject</p>
-                            </div>
-                        </div>
-                        <div class="config-input-wrapper">
-                            <input type="number" id="batchMinMarks" value="35" min="1" max="100" oninput="updateBatchTotals()" class="config-input">
-                            <span class="input-unit">marks</span>
+            <div class="current-selection">
+                <div class="selection-summary">
+                    <div class="summary-card">
+                        <h4>📝 Current Selection</h4>
+                        <div class="summary-details">
+                            <p><strong>Class:</strong> <span id="summaryClassName">-</span></p>
+                            <p><strong>Academic Year:</strong> <span id="summaryAcademicYear">-</span></p>
+                            <p><strong>Exam:</strong> <span id="summaryExamName">-</span></p>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Calculation Summary -->
-                <div class="calculation-summary">
-                    <h4 class="summary-title">📊 Calculation Summary</h4>
-                    <div class="summary-grid">
-                        <div class="summary-item total-max">
-                            <div class="summary-label">Total Maximum</div>
-                            <div class="summary-value" id="batchTotalMax">600</div>
-                            <div class="summary-formula" id="maxFormula">(100 × 6 subjects)</div>
-                        </div>
-                        <div class="summary-divider">vs</div>
-                        <div class="summary-item total-min">
-                            <div class="summary-label">Total Minimum</div>
-                            <div class="summary-value" id="batchTotalMin">210</div>
-                            <div class="summary-formula" id="minFormula">(35 × 6 subjects)</div>
-                        </div>
-                    </div>
-                    <div class="subjects-info">
-                        <span class="subjects-count">📚 6 Subjects Total</span>
-                    </div>
+            </div>
+            
+            <div class="students-search">
+                <div class="search-box">
+                    <input type="text" id="studentSearch" placeholder="Search students by name or roll number...">
+                    <div class="search-icon">🔍</div>
                 </div>
+            </div>
+            
+            <div class="students-grid" id="studentsGrid">
+                <div class="loading-message">
+                    <div class="loading-icon">⏳</div>
+                    <h3>Loading Students...</h3>
+                    <p>Please wait while we fetch students for the selected class</p>
+                </div>
+            </div>
+            
+            <div class="students-summary" id="studentsSummary" style="display: none;">
+                <p>Showing <span id="visibleStudentsCount">0</span> of <span id="totalStudentsCount">0</span> students</p>
             </div>
             
             <div class="step-actions">
-                <button class="btn btn-secondary" id="backToCustomize">← Back</button>
-                <button class="btn btn-primary" id="nextToPreview">Next: Preview →</button>
+                <button class="btn btn-secondary" id="backToExams">← Back</button>
+                <button class="btn btn-primary" id="generateReportCard" disabled>Generate Report Card →</button>
             </div>
         </div>
         
-        <!-- Step 4: Preview -->
+        <!-- Step 4: Generate Report Card -->
         <div class="step-content" id="step4">
             <div class="step-header">
-                <h2>👁️ Step 4: Preview Report Cards</h2>
-                <p>Review your report cards before generating PDFs</p>
+                <h2>📋 Step 4: Report Card Generated</h2>
+                <p>Your report card is ready! You can view, print or download it as PDF</p>
             </div>
             
-            <div class="preview-controls">
-                <div class="preview-info">
-                    <span class="student-count">Found <strong id="studentCount">0</strong> students</span>
-                </div>
-                <div class="preview-actions">
-                    <button class="btn btn-outline" id="generatePreview">📊 Generate Statistics</button>
-                </div>
-            </div>
-            
-            <!-- Statistics Dashboard -->
-            <div id="statisticsContainer" class="statistics-container">
-                <div class="stats-placeholder">
-                    <div class="placeholder-icon">📊</div>
-                    <h3>Statistics Will Appear Here</h3>
-                    <p>Click "Generate Statistics" to see class-wise breakdown and performance overview.</p>
+            <div class="report-card-display" id="reportCardDisplay">
+                <div class="loading-message">
+                    <div class="loading-icon">⏳</div>
+                    <h3>Generating Report Card...</h3>
+                    <p>Please wait while we generate the report card with marks from the database</p>
                 </div>
             </div>
             
-            <!-- Class Filter Section -->
-            <div id="classFilterSection" class="class-filter-section" style="display: none;">
-                <div class="filter-header">
-                    <h4>🎯 Quick Class Filter</h4>
-                    <p>Select a specific class to view detailed statistics</p>
+            <div class="actions-panel" id="actionsPanel" style="display: none;">
+                <div class="actions-header">
+                    <h4>🎯 Report Card Ready</h4>
+                    <p>Your report card has been generated successfully</p>
                 </div>
-                <div class="class-buttons" id="classButtons">
-                    <!-- Class filter buttons will be generated here -->
+                <div class="print-section">
+                    <button class="modern-print-btn" onclick="printReportCard()">
+                        <div class="print-icon">🖨️</div>
+                        <div class="print-content">
+                            <span class="print-title">Print Report Card</span>
+                            <span class="print-subtitle">High-quality print with school logo</span>
+                        </div>
+                    </button>
                 </div>
             </div>
             
             <div class="step-actions">
-                <button class="btn btn-secondary" id="backToMarks">← Back</button>
-                <button class="btn btn-success" id="proceedToGenerate">📋 Generate All Hall Tickets →</button>
+                <button class="btn btn-secondary" id="backToStudents">← Back to Students</button>
+                <button class="btn btn-primary" id="startOver">Start Over</button>
             </div>
         </div>
         
-        <!-- Step 5: Generate -->
-        <div class="step-content" id="step5">
-            <div class="step-header">
-                <h2>📋 Step 5: Generate & Download</h2>
-                <p>Your complete report cards are ready! Filter, print, or download as needed.</p>
-            </div>
-            
-            <div id="finalOutput" class="final-output">
-                <div class="generation-options">
-                    <div class="options-header">
-                        <div class="options-icon">📦</div>
-                        <h3>Choose Generation Method</h3>
-                        <p>Select how you want to generate and download your hall tickets</p>
-                    </div>
-                    
-                    <div class="generation-grid">
-                        <!-- Generate All Option -->
-                        <div class="generation-card all-cards">
-                            <div class="card-icon">📋</div>
-                            <h4>Generate All Hall Tickets</h4>
-                            <p>Create hall tickets for all students across all classes</p>
-                            <div class="card-stats">
-                                <span class="stat-item">
-                                    <strong id="totalStudentsCount">0</strong> Students
-                                </span>
-                                <span class="stat-item">
-                                    <strong id="totalClassesCount">0</strong> Classes
-                                </span>
-                            </div>
-                            <div class="card-actions">
-                                <button class="action-btn primary-btn" onclick="generateAllHallTickets()">
-                                    🗨️ Print All
-                                </button>
-                                <button class="action-btn secondary-btn" onclick="downloadAllHallTickets()">
-                                    📥 Download PDF
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Class-wise Options -->
-                        <div class="generation-card class-wise">
-                            <div class="card-icon">🎯</div>
-                            <h4>Class-wise Generation</h4>
-                            <p>Generate hall tickets for specific classes only</p>
-                            <div class="class-selector">
-                                <label for="classSelectGenerate">Select Class:</label>
-                                <select id="classSelectGenerate" onchange="updateClassStats()">
-                                    <option value="">Choose a class...</option>
-                                </select>
-                            </div>
-                            <div class="class-stats" id="classStats" style="display: none;">
-                                <span class="stat-item">
-                                    <strong id="selectedClassCount">0</strong> Students
-                                </span>
-                            </div>
-                            <div class="card-actions">
-                                <button class="action-btn primary-btn" onclick="printClassHallTickets()" id="printClassBtn" disabled>
-                                    🗨️ Print Class
-                                </button>
-                                <button class="action-btn secondary-btn" onclick="downloadClassHallTickets()" id="downloadClassBtn" disabled>
-                                    📥 Download Class PDF
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         
     </div>
 
     <div id="output"></div>
+    
+    <!-- Floating New Card Button -->
+    <button class="floating-btn" id="floatingNewCard" onclick="generateNewCard()" style="display: none;" title="Generate New Card">
+        <span class="floating-icon">✨</span>
+        <span class="floating-text">New Card</span>
+    </button>
 
     <template id="hallTicketTemplate">
         <div class="hall-ticket">
